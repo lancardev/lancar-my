@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
   <title>Lancar.my - Create Your Landing Page</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
@@ -26,9 +26,9 @@
     <p>© 2025 Lancar.my</p>
   </footer>
 
-  <!-- 1) Load the official supabase-js bundle (UMD/global) -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
-  <!-- 2) Then your app code -->
+  <!-- 1) UMD bundle (exposes window.supabase.createClient) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.28.0/dist/umd/index.min.js"></script>
+  <!-- 2) Your signup logic -->
   <script src="script.js"></script>
 </body>
 </html>
