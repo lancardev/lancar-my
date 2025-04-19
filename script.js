@@ -1,65 +1,49 @@
-// Initialize Supabase client with your Supabase URL and Key
-const supabaseUrl = 'https://cbrumoenpvfkaupkarzt.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNicnVtb2VucHZma2F1cGthcnp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ4OTI1MTMsImV4cCI6MjA2MDQ2ODUxM30.1g5OfqUxr-9MqeeMRH11upocQZLVvJCCNi7nbvu2iD8';
-const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+// 1) Grab the global Supabase object from window
+const { createClient } = window.supabase;
 
-// Log Supabase client initialization
-console.log("Supabase client initialized", supabase);
+// 2) Initialize your client under a new name
+const supabaseClient = createClient(
+  'https://cbrumoenpvfkaupkarzt.supabase.co',
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOi…'
+);
 
-// Ensure everything is ready before attaching event listeners
-window.onload = function() {
-    // Log window load
-    console.log("Window loaded, ready to attach event listener.");
+console.log('✅ supabaseClient ready:', supabaseClient);
 
-    // Handle Sign-Up Button Click
-    document.getElementById('sign-up-button').addEventListener('click', async function() {
-        // Log the Sign-Up button click
-        console.log("Sign Up button clicked.");
+window.onload = () => {
+  console.log('🖼 Window loaded');
 
-        // Get email and password input from the user
-        const email = prompt("Enter your email:");  // Prompt for email
-        const password = prompt("Enter your password:");  // Prompt for password
+  document.getElementById('sign-up-button').addEventListener('click', async () => {
+    console.log('👉 Sign‑Up button clicked');
 
-        console.log("User email: ", email); // Log user email
-        console.log("User password: ", password); // Log user password
+    const email = prompt('Enter your email:');
+    const password = prompt('Enter your password:');
+    console.log('🧑‍💻 creds', { email, password });
 
-        // Perform the sign-up operation with Supabase
-        const { user, error } = await supabase.auth.signUp({
-            email,
-            password
-        });
+    // Use *supabaseClient* instead of `supabase`
+    const { user, error } = await supabaseClient.auth.signUp({ email, password });
+    if (error) {
+      alert('Sign‑up error: ' + error.message);
+      return;
+    }
+    alert('✔️ Check your email for the confirmation link!');
 
-        if (error) {
-            console.error('Error during sign-up:', error.message); // Log error if sign-up fails
-            alert('Error during sign-up: ' + error.message);
-        } else {
-            console.log('Sign-up successful:', user); // Log success
-            alert('Please check your email for the authentication link!');
+    const referralCode = 'USER' + Math.random().toString(36).slice(2, 10).toUpperCase();
+    console.log('🔑 referralCode:', referralCode);
 
-            // After sign-up, generate a unique referral code
-            const referralCode = 'USER' + Math.random().toString(36).substring(2, 10).toUpperCase();
-            console.log("Generated Referral Code: ", referralCode);
+    const { data, insertError } = await supabaseClient
+      .from('users')
+      .insert([{
+        user_id: user.id,
+        email,
+        referral_code: referralCode,
+        subscription_status: 'pending',
+        subscription_plan: 'free',
+      }]);
 
-            // Insert the user data into the 'users' table
-            const { data, insertError } = await supabase
-                .from('users')
-                .insert([
-                    { 
-                        user_id: user.id,  // Link user ID from Supabase
-                        email: email,  // Store the email
-                        referral_code: referralCode,  // Store the generated referral code
-                        subscription_status: 'pending',  // Initial subscription status
-                        subscription_plan: 'free',  // Default plan
-                    }
-                ]);
-
-            if (insertError) {
-                console.error('Error saving user data:', insertError.message); // Log any insert error
-                alert('Error saving user data: ' + insertError.message);
-            } else {
-                console.log('User data saved successfully:', data);
-                window.location.href = 'payment-page.html';  // Redirect to payment page after successful sign-up
-            }
-        }
-    });
+    if (insertError) {
+      alert('DB error: ' + insertError.message);
+    } else {
+      window.location.href = 'payment-page.html';
+    }
+  });
 };
