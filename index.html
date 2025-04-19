@@ -1,33 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Lancar.my - Create Your Landing Page</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Lancar.my - Create Your Landing Page</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <header>
-        <h1>Selamat datang ke Lancar.my</h1>
-        <p>Buat 111 laman web guna AI, semudah masak meggi – siap dalam sekelip mata dengan Lancar.my!</p>
-    </header>
+  <header>
+    <h1>Selamat datang ke Lancar.my</h1>
+    <p>Buat 111 laman web guna AI, semudah masak meggi – siap dalam sekelip mata dengan Lancar.my!</p>
+  </header>
 
-    <section>
-        <h2>Mudah..Tak perlu pandai coding pun!</h2>
-        <p>Lancar.my guna AI untuk buat laman web yang menarik tanpa susah payah. Dari perniagaan hingga portfolio peribadi, anda boleh hasilkan sehingga 111 laman pelancaran dengan mudah. Tiada coding diperlukan – cuma klik, dan siap! Sertai Lancar.my sekarang untuk lancarkan projek anda dengan gaya, direka untuk pengguna Malaysia.</p>
+  <section>
+    <h2>Mudah..Tak perlu pandai coding pun!</h2>
+    <p>
+      Lancar.my guna AI untuk buat laman web yang menarik tanpa susah payah. Dari perniagaan hingga portfolio peribadi,
+      anda boleh hasilkan sehingga 111 laman pelancaran dengan mudah. Tiada coding diperlukan – cuma klik, dan siap!
+      Sertai Lancar.my sekarang untuk lancarkan projek anda dengan gaya, direka untuk pengguna Malaysia.
+    </p>
+    <button id="sign-up-button" class="btn-signup">Sign Up</button>
+  </section>
 
-        <!-- Sign Up Button to trigger the Supabase email sign-up -->
-        <button id="sign-up-button" class="btn-signup">Sign Up</button>
-    </section>
+  <footer>
+    <p>© 2025 Lancar.my</p>
+  </footer>
 
-    <footer>
-        <p>© 2025 Lancar.my</p>
-    </footer>
-
-    <!-- 1) Load the Supabase SDK first -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.28.0/dist/umd/index.min.js"></script>
-<!-- 2) Then your custom script -->
-<script src="script.js"></script>
-
+  <!-- 1) UMD bundle (exposes window.supabase.createClient) -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@1.28.0/dist/umd/index.min.js"></script>
+  <!-- 2) Your custom logic -->
+  <script src="script.js"></script>
 </body>
 </html>
