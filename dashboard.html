@@ -1,40 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Dashboard - Lancar.my</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+  <title>Your Dashboard – Lancar.my</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <header>
-        <h1>Welcome to Your Dashboard</h1>
-        <p>Your unique referral code and commissions are shown below.</p>
-    </header>
+  <header>
+    <h1>Dashboard</h1>
+  </header>
+  <main>
+    <p>Your referral code: <strong><span id="referral-code">—</span></strong></p>
+    <p>Your commission balance: <strong>RM<span id="commission-balance">0.00</span></strong></p>
+  </main>
 
-    <section id="referral-info">
-        <h2>Your Referral Code</h2>
-        <p id="referral-code">USER123456</p> <!-- Simulated referral code -->
-        
-        <h2>Your Commission</h2>
-        <p id="commission">RM4.90</p> <!-- Simulated commission -->
-    </section>
-
-    <section id="project-form">
-        <h2>Create Your Landing Page</h2>
-        <label for="project-title">Project Title (for Subdomain Name):</label>
-        <input type="text" id="project-title" placeholder="Enter project title" />
-
-        <label for="code-input">Paste Your Code Here:</label>
-        <textarea id="code-input" placeholder="Paste the code from ChatGPT or Grok here"></textarea>
-
-        <button type="submit">Generate Landing Page</button>
-    </section>
-
-    <footer>
-        <p>© 2025 Lancar.my</p>
-    </footer>
-
-    <script src="script.js"></script>
+  <!-- Supabase UMD bundle -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <!-- Dashboard logic -->
+  <script src="dashboard.js"></script>
 </body>
 </html>
