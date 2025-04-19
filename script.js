@@ -1,22 +1,28 @@
 // 1) Your Supabase credentials
 const SUPABASE_URL = 'https://cbrumoenpvfkaupkarzt.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNicnVtb2VucHZma2F1cGthcnp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ4OTI1MTMsImV4cCI6MjA2MDQ2ODUxM30.1g5OfqUxr-9MqeeMRH11upocQZLVvJCCNi7nbvu2iD8';
+const SUPABASE_KEY =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNicnVtb2VucHZma2F1cGthcnp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ4OTI1MTMsImV4cCI6MjA2MDQ2ODUxM30.1g5OfqUxr-9MqeeMRH11upocQZLVvJCCNi7nbvu2iD8';
 
-// 2) Wait for the DOM to be ready
+// 2) Wait for DOM ready
 window.addEventListener('DOMContentLoaded', () => {
   console.log('✅ DOM loaded');
 
-  // 3) Check that the UMD bundle exposed the global properly
-  if (!window.supabase || typeof window.supabase.createClient !== 'function') {
-    console.error('❌ window.supabase.createClient is NOT available');
+  // 3) Find the global Supabase factory
+  let SupabaseFactory = window.supabase;
+  if (!SupabaseFactory || typeof SupabaseFactory.createClient !== 'function') {
+    // fallback if they exported under .default
+    SupabaseFactory = window.supabase?.default || window.supabase?.supabase || null;
+  }
+  if (!SupabaseFactory || typeof SupabaseFactory.createClient !== 'function') {
+    console.error('❌ Supabase factory not found:', window.supabase);
     return;
   }
 
-  // 4) Initialize your Supabase client
-  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  // 4) Initialize your client
+  const supabaseClient = SupabaseFactory.createClient(SUPABASE_URL, SUPABASE_KEY);
   console.log('🔑 supabaseClient ready:', supabaseClient);
 
-  // 5) Wire up the Sign Up button
+  // 5) Wire up the button
   const btn = document.getElementById('sign-up-button');
   if (!btn) {
     console.error('❌ #sign-up-button not found');
@@ -32,7 +38,7 @@ window.addEventListener('DOMContentLoaded', () => {
     const password = prompt('Enter your password:');
     console.log('🧑‍💻 creds', { email, password });
 
-    // 7) Call Supabase signUp
+    // 7) Call Supabase
     const { user, error } = await supabaseClient.auth.signUp({ email, password });
     if (error) {
       console.error('⚠️ signUp error', error);
@@ -42,18 +48,21 @@ window.addEventListener('DOMContentLoaded', () => {
     alert('✅ Check your email for the confirmation link!');
 
     // 8) Generate referral & save in your table
-    const referralCode = 'USER' + Math.random().toString(36).slice(2, 10).toUpperCase();
+    const referralCode =
+      'USER' + Math.random().toString(36).slice(2, 10).toUpperCase();
     console.log('🔑 referralCode', referralCode);
 
     const { data, insertError } = await supabaseClient
       .from('users')
-      .insert([{
-        user_id: user.id,
-        email,
-        referral_code: referralCode,
-        subscription_status: 'pending',
-        subscription_plan: 'free',
-      }]);
+      .insert([
+        {
+          user_id: user.id,
+          email,
+          referral_code: referralCode,
+          subscription_status: 'pending',
+          subscription_plan: 'free'
+        }
+      ]);
 
     if (insertError) {
       console.error('⚠️ insertError', insertError);
@@ -61,7 +70,7 @@ window.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
-    // 9) All set: redirect to payment
+    // 9) Done → payment
     window.location.href = 'payment-page.html';
   });
 });
