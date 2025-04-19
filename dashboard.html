@@ -1,3 +1,5 @@
+<!-- dashboard.html -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -13,9 +15,27 @@
   <main>
     <p>Your referral code: <strong><span id="referral-code">—</span></strong></p>
     <p>Your commission balance: <strong>RM<span id="commission-balance">0.00</span></strong></p>
+
+    <!-- NEW: Create Project Form -->
+    <section id="new-project">
+      <h2>Create Your Project</h2>
+      <form id="project-form">
+        <label>
+          Project Title (subdomain):
+          <input type="text" id="project-title" required placeholder="e.g. mysite" />
+        </label>
+        <label>
+          Paste Your Code:
+          <textarea id="project-code" rows="8" required placeholder="&lt;!-- your HTML/CSS/JS here --&gt;"></textarea>
+        </label>
+        <button type="submit">LANCAR</button>
+      </form>
+    </section>
   </main>
 
-  <!-- Load as ES module -->
+  <!-- Supabase bundle for dashboard logic -->
   <script type="module" src="dashboard.js"></script>
+  <!-- Load project handler -->
+  <script type="module" src="project.js"></script>
 </body>
 </html>
