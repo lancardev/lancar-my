@@ -1,34 +1,49 @@
-// 1) Grab the global Supabase object from window
-const { createClient } = window.supabase;
+// (1) Your Supabase creds
+const SUPABASE_URL = 'https://cbrumoenpvfkaupkarzt.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNicnVtb2VucHZma2F1cGthcnp0Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ4OTI1MTMsImV4cCI6MjA2MDQ2ODUxM30.1g5OfqUxr-9MqeeMRH11upocQZLVvJCCNi7nbvu2iD8';
 
-// 2) Initialize your client under a new name
-const supabaseClient = createClient(
-  'https://cbrumoenpvfkaupkarzt.supabase.co',
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOi…'
-);
+// (2) Wait for the DOM to be ready
+window.addEventListener('DOMContentLoaded', () => {
+  console.log('✅ DOM loaded');
 
-console.log('✅ supabaseClient ready:', supabaseClient);
+  // (3) Pull the global supabase object
+  if (!window.supabase || typeof window.supabase.createClient !== 'function') {
+    console.error('❌ window.supabase.createClient is NOT available');
+    return;
+  }
 
-window.onload = () => {
-  console.log('🖼 Window loaded');
+  // (4) Initialize *our* client
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  console.log('🔑 supabaseClient ready:', supabaseClient);
 
-  document.getElementById('sign-up-button').addEventListener('click', async () => {
-    console.log('👉 Sign‑Up button clicked');
+  // (5) Wire up the button
+  const btn = document.getElementById('sign-up-button');
+  if (!btn) {
+    console.error('❌ #sign-up-button not found');
+    return;
+  }
+  console.log('🛠️ Attaching click handler to Sign Up button');
 
+  btn.addEventListener('click', async () => {
+    console.log('👉 Sign‑Up clicked');
+
+    // (6) Prompt for credentials
     const email = prompt('Enter your email:');
     const password = prompt('Enter your password:');
     console.log('🧑‍💻 creds', { email, password });
 
-    // Use *supabaseClient* instead of `supabase`
+    // (7) Call Supabase
     const { user, error } = await supabaseClient.auth.signUp({ email, password });
     if (error) {
+      console.error('⚠️ signUp error', error);
       alert('Sign‑up error: ' + error.message);
       return;
     }
-    alert('✔️ Check your email for the confirmation link!');
+    alert('✅ Check your email for the link!');
 
+    // (8) Generate referral & save to your table
     const referralCode = 'USER' + Math.random().toString(36).slice(2, 10).toUpperCase();
-    console.log('🔑 referralCode:', referralCode);
+    console.log('🔑 referralCode', referralCode);
 
     const { data, insertError } = await supabaseClient
       .from('users')
@@ -41,9 +56,12 @@ window.onload = () => {
       }]);
 
     if (insertError) {
+      console.error('⚠️ insertError', insertError);
       alert('DB error: ' + insertError.message);
-    } else {
-      window.location.href = 'payment-page.html';
+      return;
     }
+
+    // (9) All set: go to payment
+    window.location.href = 'payment-page.html';
   });
-};
+});
